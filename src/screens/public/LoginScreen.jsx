@@ -30,9 +30,9 @@ const LoginScreen = () => {
     }
 
     return (
-        <div className="h-screen flex flex-col items-center justify-start pt-24 w-full">
+        <div className="min-h-[calc(100vh-3.6rem)] flex flex-col items-center justify-start pt-24 w-full">
             <h2 className="text-3xl font-bold mb-6 text-center text-blue-900">
-                Iniciar Seisón
+                Iniciar Sesión
             </h2>
             <TabGroup className="w-full px-4 lg:px-24" onChange={() => {
                 setUsername("")
@@ -84,7 +84,6 @@ const LoginScreen = () => {
                     ))}
                 </TabPanels>
             </TabGroup>
-            <p>{username}</p>
         </div>
     )
 }
