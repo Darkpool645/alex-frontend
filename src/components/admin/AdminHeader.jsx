@@ -24,10 +24,10 @@ const AdminHeader = () => {
                         </DisclosureButton>
                     </div>
                     <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                        <div className="flex shrink-0 items-center gap-3">
+                        <Link to="/admin" className="flex shrink-0 items-center gap-3">
                             <img alt="ALEX Logo" src={logo} className="size-8" />
                             <h1 className="text-3xl text-white font-bold">ALEX</h1>
-                        </div>
+                        </Link>
                         <div className="hidden sm:ml-6 sm:block">
                             <div className="flex space-x-4">
                                 {navigation.map((item) => (

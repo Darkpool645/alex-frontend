@@ -1,6 +1,7 @@
 import { HomeIcon, PlusCircleIcon, ArrowsUpDownIcon } from "@heroicons/react/24/solid";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import FastCounter from "@/components/common/FastCounter";
+import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
     const menu = [
@@ -40,11 +41,10 @@ const AdminDashboard = () => {
                                 type="button">
                                 Ver más
                             </button>
-                            <button className="flex select-none items-center gap-2 rounded bg-blue-900 py-2.5 px-4 text-xs font-semibold text-white shadow-md shadow-slate-900/10 transition-all hover:shadow-lg hover::shadow-slate-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85]"
-                                type="button">
+                            <Link to ="/admin/exams/new-exam" className="flex select-none items-center gap-2 rounded bg-blue-900 py-2.5 px-4 text-xs font-semibold text-white shadow-md shadow-slate-900/10 transition-all hover:shadow-lg hover::shadow-slate-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85]">
                                 <PlusCircleIcon className="size-6 text-white" />
                                 Agregar Examen
-                            </button>
+                            </Link>
                         </div>
                     </div>
                     <div className="p-0">
