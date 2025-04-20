@@ -4,8 +4,8 @@ const AdminLayout = () => {
     return(
         <div>
             <AdminHeader/>
-            <main>
-                <Outlet />
+            <main className="px-8">
+                <Outlet className="h-fit w-fit"/>
             </main>
         </div>
     )
