@@ -35,7 +35,8 @@ const CreateExamScreen = () => {
         title: "",
         mode: "",
         teacher: "",
-        duration: ""
+        duration: "",
+        subject: "",
     });
     const [errors, setErrors] = useState({});
 
@@ -90,8 +91,10 @@ const CreateExamScreen = () => {
                         onBlur={(e) => validateField("duration", e.target.value)}
                     />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-4 pt-10">
-
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-4 pt-2">
+                    <InputField label={"Materia"} value={formData.subject} onChange={handleChange("subject")}
+                        required error={!!errors.subject} errorMessage={errors.subject} onBlur={(e) => validateField("subject", e.target.value)} />
+                    <InputField label={"Prueba"} value={""} onChange={() => {}} required onBlur={() => {}} />
                 </div>
                 <button type="submit" className="bg-blue-900 text-white rounded-lg py-2 px-3 w-full font-semibold mt-10">Guardar examen</button>
             </form>
