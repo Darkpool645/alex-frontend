@@ -2,6 +2,7 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { UserIcon, AcademicCapIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const LoginScreen = () => {
     const [username, setUsername] = useState("");
@@ -84,6 +85,7 @@ const LoginScreen = () => {
                     ))}
                 </TabPanels>
             </TabGroup>
+            <Link to="/exam-code" className="underline text-blue-900 text-lg mt-10">Ingresar como alumno</Link>
         </div>
     )
 }

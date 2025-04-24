@@ -2,7 +2,7 @@ import { useState } from "react";
 import InputField from "@/components/common/InputField";
 import useForm from "@/hooks/useFormHook";
 import FileDropInput from "@/components/common/FileDropInput";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const RegisterScreen = () => {
     const navigate = useNavigate();
@@ -69,6 +69,10 @@ const RegisterScreen = () => {
                     </div>
                     <button type="submit" className="bg-blue-900 text-white rounded-lg py-2 px-3 w-full font-semibold mt-10 mb-10">Registrar Institución</button>
                 </form>
+                <div className="w-full text-center justify-center flex my-10">
+                    ¿Ya tienes una cuenta?
+                    <Link to="/login" className="underline text-blue-900">Iniciar sesión</Link>
+                </div>
             </div>
         </div>
     );
