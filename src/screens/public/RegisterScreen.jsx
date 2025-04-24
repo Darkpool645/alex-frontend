@@ -67,7 +67,7 @@ const RegisterScreen = () => {
                         <InputField label={"Correo personal"} value={formData.userEmail} onChange={handleChange("userEmail")} placeholder="Correo personal" required
                             error={!!errors.userEmail} errorMessage={errors.userEmail} onBlur={(e) => validateField("userEmail", e.target.value)} />
                     </div>
-                    <button type="submit" className="bg-blue-900 text-white rounded-lg py-2 px-3 w-full font-semibold mt-10">Registrar Institución</button>
+                    <button type="submit" className="bg-blue-900 text-white rounded-lg py-2 px-3 w-full font-semibold my-10">Registrar Institución</button>
                 </form>
             </div>
         </div>
