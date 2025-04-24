@@ -2,6 +2,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import logo from "@/assets/svgs/favicon.svg";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 
 
@@ -11,6 +12,7 @@ const AdminHeader = () => {
         { name: "Exámenes", href: "/exams", current: false },
         { name: "Docentes", href: "/teachers", current: false }
     ];
+    const { logout } = useAuth();
     return (
         <Disclosure as="nav" className="bg-blue-900">
             <div className="w-full px-2 sm:px-6 lg:px-8">
@@ -72,7 +74,7 @@ const AdminHeader = () => {
                                     </Link>
                                 </MenuItem>
                                 <MenuItem>
-                                    <a href="/" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden">
+                                    <a href="/" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-hidden" onClick={logout}>
                                         Cerrar Sesión
                                     </a>
                                 </MenuItem>

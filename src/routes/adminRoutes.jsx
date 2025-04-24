@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import AuthLayout from "../config/AuthLayout";
 
 const AdminLayout = lazy(() => import("@/components/admin/AdminLayout.jsx"));
 const AdminDashboardScreen = lazy(() => import("@/screens/admin/AdminDashboardScreen.jsx"));
@@ -10,7 +11,9 @@ const AdminRoutes = [
         path: "/admin",
         element: (
             <Suspense fallback={<Loader />}>
-                <AdminLayout />
+                <AuthLayout>
+                    <AdminLayout />
+                </AuthLayout>
             </Suspense>
         ),
         children: [

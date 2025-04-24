@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import AuthLayout from "@/config/AuthLayout";
 
 const PublicLayout = lazy(() => import("@/components/public/PublicLayout.jsx"));
 const LoginScreen = lazy(() => import("@/screens/public/LoginScreen.jsx"));
@@ -12,7 +13,9 @@ const PublicRoutes = [
         path: "/",
         element: (
             <Suspense fallback={<Loader />}>
-                <PublicLayout />
+                <AuthLayout>
+                    <PublicLayout />
+                </AuthLayout>
             </Suspense>
         ),
         children: [

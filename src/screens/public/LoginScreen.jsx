@@ -5,13 +5,16 @@ import InputField from "@/components/common/InputField";
 import useForm from "@/hooks/useFormHook";
 import { useNavigate } from "react-router-dom";
 import { loginRequest } from "@/services/authServices";
+import { useAuth } from "@/context/AuthContext";
 
 const LoginScreen = () => {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const onSubmit = async(data) => {
         try{
             const result = await loginRequest(data);
             if (result.httpStatusCode === 200) {
+                login(result.data);
                 navigate("/admin");
             }
         } catch (error) {
