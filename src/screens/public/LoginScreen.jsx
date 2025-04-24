@@ -4,14 +4,19 @@ import { Link } from "react-router-dom";
 import InputField from "@/components/common/InputField";
 import useForm from "@/hooks/useFormHook";
 import { useNavigate } from "react-router-dom";
+import { loginRequest } from "@/services/authServices";
 
 const LoginScreen = () => {
     const navigate = useNavigate();
-    const onSubmit = () => {
-        console.log(`REQUEST:  username - ${baseForm}`);
-        setTimeout(() => {
-            navigate("/admin")
-        }, 1000);
+    const onSubmit = async(data) => {
+        try{
+            const result = await loginRequest(data);
+            if (result.httpStatusCode === 200) {
+                navigate("/admin");
+            }
+        } catch (error) {
+            console.error("error en la peticion:", error);
+        }
     };
 
     const baseForm = {
