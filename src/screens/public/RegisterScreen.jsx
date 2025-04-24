@@ -2,9 +2,10 @@ import { useState } from "react";
 import InputField from "@/components/common/InputField";
 import useForm from "@/hooks/useFormHook";
 import FileDropInput from "@/components/common/FileDropInput";
+import { useNavigate } from "react-router-dom";
 
 const RegisterScreen = () => {
-
+    const navigate = useNavigate();
     const initialForm = {
         schoolName: "",
         address: "",
@@ -25,12 +26,12 @@ const RegisterScreen = () => {
         schoolLogo: { required: false }
     };
     const { formData, errors, handleChange, validateField, handleSubmit } = useForm(initialForm, validationSchema);
-    
+
 
     const onSubmit = (data) => {
         console.log("Formulario completado", data);
         setTimeout(() => {
-            window.location.replace("/admin")
+            navigate("/admin");
         }, 1000);
         // TODO - Lógica real aquí
     }
@@ -51,20 +52,20 @@ const RegisterScreen = () => {
                             onBlur={(e) => validateField("address", e.target.value, false)} />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
-                        <InputField label={"Correo de contacto"} value={formData.emailContact} onChange={handleChange("emailContact")} 
-                            placeholder="Correo de contacto" required error={!!errors.emailContact} errorMessage={errors.emailContact} 
-                            onBlur={(e) => validateField("emailContact", e.target.value)}/>
-                        <InputField label={"Teléfono de contacto"} value={formData.phoneContact} onChange={handleChange("phoneContact")} 
-                            placeholder="Teléfono de contacto" required error={!!errors.phoneContact} errorMessage={errors.phoneContact} 
-                            onBlur={(e) => validateField("phoneContact", e.target.value)}/>
+                        <InputField label={"Correo de contacto"} value={formData.emailContact} onChange={handleChange("emailContact")}
+                            placeholder="Correo de contacto" required error={!!errors.emailContact} errorMessage={errors.emailContact}
+                            onBlur={(e) => validateField("emailContact", e.target.value)} />
+                        <InputField label={"Teléfono de contacto"} value={formData.phoneContact} onChange={handleChange("phoneContact")}
+                            placeholder="Teléfono de contacto" required error={!!errors.phoneContact} errorMessage={errors.phoneContact}
+                            onBlur={(e) => validateField("phoneContact", e.target.value)} />
                     </div>
                     <FileDropInput label="Logo de la institución" value={formData.schoolLogo} onChange={(file) => handleChange("schoolLogo")({ target: { value: file } })}
                         onBlur={() => validateField("schoolLogo", formData.schoolLogo)} accept="image/jpeg, image/png" error={!!errors.schoolLogo} errorMessage={errors.schoolLogo} />
                     <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
                         <InputField label={"Nombre"} value={formData.fullName} onChange={handleChange("fullName")} placeholder="Nombre de empleado" required
-                            error={!!errors.fullName} errorMessage={errors.fullName} onBlur={(e) => validateField("fullName", e.target.value)}/>
+                            error={!!errors.fullName} errorMessage={errors.fullName} onBlur={(e) => validateField("fullName", e.target.value)} />
                         <InputField label={"Correo personal"} value={formData.userEmail} onChange={handleChange("userEmail")} placeholder="Correo personal" required
-                            error={!!errors.userEmail} errorMessage={errors.userEmail} onBlur={(e) => validateField("userEmail", e.target.value)}/>
+                            error={!!errors.userEmail} errorMessage={errors.userEmail} onBlur={(e) => validateField("userEmail", e.target.value)} />
                     </div>
                     <button type="submit" className="bg-blue-900 text-white rounded-lg py-2 px-3 w-full font-semibold mt-10">Registrar Institución</button>
                 </form>
