@@ -9,7 +9,7 @@ const ExamAccessScreen = () => {
     };
 
     const baseSchema = {
-        examCode: { required: true }
+        examCode: { required: true, minLength: 8, maxLength: 8 }
     };
 
     const { formData, errors, handleChange, validateField, handleSubmit, setFormData } = useForm(baseForm, baseSchema);

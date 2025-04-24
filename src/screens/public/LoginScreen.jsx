@@ -30,7 +30,7 @@ const LoginScreen = () => {
     }
 
     const baseSchema = {
-        accessCode: { required: true }
+        accessCode: { required: true, minLength: 8 }
     }
 
     const { formData, errors, handleChange, validateField, handleSubmit, setFormData } = useForm(baseForm, baseSchema);
