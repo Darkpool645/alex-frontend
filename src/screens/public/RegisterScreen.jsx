@@ -1,8 +1,8 @@
-import { useState } from "react";
 import InputField from "@/components/common/InputField";
 import useForm from "@/hooks/useFormHook";
 import FileDropInput from "@/components/common/FileDropInput";
 import { Link, useNavigate } from "react-router-dom";
+import { registerInstitute } from "@/services/InstituteServices";
 
 const RegisterScreen = () => {
     const navigate = useNavigate();
@@ -10,7 +10,7 @@ const RegisterScreen = () => {
         schoolName: "",
         address: "",
         fullName: "",
-        emalContact: "",
+        emailContact: "",
         phoneContact: "",
         userEmail: "",
         shoolLogo: null,
@@ -28,13 +28,17 @@ const RegisterScreen = () => {
     const { formData, errors, handleChange, validateField, handleSubmit } = useForm(initialForm, validationSchema);
 
 
-    const onSubmit = (data) => {
-        console.log("Formulario completado", data);
-        setTimeout(() => {
-            navigate("/admin");
-        }, 1000);
-        // TODO - Lógica real aquí
-    }
+    const onSubmit = async (data) => {
+        try {
+            const result = await registerInstitute(data);
+            if (result.httpStatusCode === 201) {
+                navigate("/login");
+            }
+        } catch (error) {
+            console.error("Error en el registro:", error);
+        }
+    };
+    
 
     return (
         <div className="min-h-[calc(100vh-3.6rem)] flex flex-col items-center justify-start pt-24 w-full">
