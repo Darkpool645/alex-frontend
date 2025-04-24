@@ -1,11 +1,14 @@
+import useInstitute from "@/hooks/useInstituteHook";
 import { Outlet } from "react-router-dom";
 import AdminHeader from "@/components/admin/AdminHeader";
 const AdminLayout = () => {
-    return(
+    const { institute } = useInstitute();
+    return (
         <div>
-            <AdminHeader/>
+            {institute && (<p className="sr-only">{institute.idInstitute}</p>)}
+            <AdminHeader />
             <main className="px-8">
-                <Outlet className="h-fit w-fit"/>
+                <Outlet className="h-fit w-fit" />
             </main>
         </div>
     )

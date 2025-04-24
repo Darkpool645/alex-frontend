@@ -1,9 +1,24 @@
+import { useEffect, useState } from "react";
 import { HomeIcon, PlusCircleIcon, ArrowsUpDownIcon } from "@heroicons/react/24/solid";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import FastCounter from "@/components/common/FastCounter";
 import { Link } from "react-router-dom";
+import { getEmployeesAmount } from "@/services/InstituteServices";
+import useInstitute from "@/hooks/useInstituteHook";
 
 const AdminDashboard = () => {
+    const { institute } = useInstitute();
+    const [employeesNumber, setEmployeesNumber] = useState(0);
+    useEffect(() => {
+        if (!institute) return;
+        const fetchEmployeesNumber = async() => {
+            const result = await getEmployeesAmount(institute.idInstitute);
+            console.log(result.data);
+            setEmployeesNumber(result.data);
+        };
+        fetchEmployeesNumber();
+    },[institute]);
+
     const menu = [
         { label: "Panel General", href: "/admin", icon: HomeIcon }
     ];
@@ -16,7 +31,7 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-10">
                 <div className="w-full min-h-28 rounded-lg shadow-md flex flex-col justify-center items-center">
                     <h1 className="text-lg font-semibold mb-1">Docentes</h1>
-                    <FastCounter target={10000} />
+                    <FastCounter target={employeesNumber} />
                 </div>
                 <div className="w-full min-h-28 rounded-lg shadow-md flex flex-col justify-center items-center">
                     <h1 className="text-lg font-semibold mb-1">Exámenes</h1>
