@@ -64,7 +64,7 @@ const RegisterScreen = () => {
                             onBlur={(e) => validateField("phoneContact", e.target.value)} />
                     </div>
                     <FileDropInput label="Logo de la institución" value={formData.schoolLogo} onChange={(file) => handleChange("schoolLogo")({ target: { value: file } })}
-                        onBlur={() => validateField("schoolLogo", formData.schoolLogo)} accept="image/jpeg, image/png" error={!!errors.schoolLogo} errorMessage={errors.schoolLogo} />
+                        onBlur={() => validateField("schoolLogo", formData.schoolLogo)} accept={{"image/png": [], "image/jpg": []}} error={!!errors.schoolLogo} errorMessage={errors.schoolLogo} />
                     <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
                         <InputField label={"Nombre"} value={formData.fullName} onChange={handleChange("fullName")} placeholder="Nombre de empleado" required
                             error={!!errors.fullName} errorMessage={errors.fullName} onBlur={(e) => validateField("fullName", e.target.value)} />

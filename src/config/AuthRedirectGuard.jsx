@@ -15,7 +15,10 @@ const AuthRedirectGuard = ({ children }) => {
 
     useEffect(()  => {
         const token = localStorage.getItem("t");
-        if (!token) return;
+        if (!token){
+            if (location.pathname !== "/") navigate("/");
+            return;
+        }
 
         try {
 

@@ -6,6 +6,7 @@ import useForm from "@/hooks/useFormHook";
 import { useNavigate } from "react-router-dom";
 import { loginRequest } from "@/services/authServices";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "react-toastify";
 
 const LoginScreen = () => {
     const navigate = useNavigate();
@@ -16,9 +17,11 @@ const LoginScreen = () => {
             if (result.httpStatusCode === 200) {
                 login(result.data);
                 navigate("/admin");
+            } else { 
             }
         } catch (error) {
             console.error("error en la peticion:", error);
+            toast.error("Credenciales inválidas");  
         }
     };
 

@@ -176,7 +176,7 @@ const CreateExamScreen = () => {
                 <InputField label="Instrucciones del examen" value={formData.instrucctions} onChange={handleChange("instrucctions")} placeholder="Instrucciones del examen"
                     required error={!!errors.instrucctions} errorMessage={errors.instrucctions} onBlur={(e) => validateField("instrucctions", e.target.value)} />
 
-                <FileDropInput label="Archivo del examen" value={formData.examFile} onChange={handleFileChange}
+                <FileDropInput label="Archivo del examen" value={formData.examFile} onChange={handleFileChange} accept={{ "text/plain": []}}
                     onBlur={() => validateField("examFile", formData.examFile)} error={!!errors.examFile} errorMessage={errors.examFile} />
 
                 {formData.questions.length > 0 && (

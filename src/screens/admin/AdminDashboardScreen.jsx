@@ -13,7 +13,7 @@ const AdminDashboard = () => {
                 <Breadcrumb items={menu} />
                 <h1 className="text-5xl font-bold">Panel General</h1>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 pt-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-10">
                 <div className="w-full min-h-28 rounded-lg shadow-md flex flex-col justify-center items-center">
                     <h1 className="text-lg font-semibold mb-1">Docentes</h1>
                     <FastCounter target={10000} />
@@ -22,21 +22,12 @@ const AdminDashboard = () => {
                     <h1 className="text-lg font-semibold mb-1">Exámenes</h1>
                     <FastCounter target={10000} />
                 </div>
-                <div className="w-full min-h-28 rounded-lg shadow-md flex flex-col justify-center items-center">
-                    <h1 className="text-lg font-semibold mb-1">Docentes</h1>
-                    <FastCounter target={10000} />
-                </div>
-                <div className="w-full min-h-28 rounded-lg shadow-md flex flex-col justify-center items-center">
-                    <h1 className="text-lg font-semibold mb-1">Docentes</h1>
-                    <FastCounter target={10000} />
-                </div>
-
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-10">
                 <div className="relaitve flex flex-col w-full h-full text-slate-700 shadow-md pt-2 px-3 rounded-xl bg-clip-border">
                     <div className="flex items-center justify-between">
                         <h3 className="text-lg font-semibold text-slate-800">Exámenes pendientes</h3>
-                        <div className="flex flex-col gap-2 shrink-0 sm:flex-row">
+                        <div className="flex flex-row gap-2 shrink-0">
                             <button className="rounded border border-slate-300 py-2.5 px-3 text-center text-xs font-semibold text-slate-600 transition-all hover:opacity-75 active:opacity-[0.85]"
                                 type="button">
                                 Ver más
@@ -48,7 +39,7 @@ const AdminDashboard = () => {
                         </div>
                     </div>
                     <div className="p-0">
-                        <table className="w-full mt-4 text-left table-auto min-w-max">
+                        <table className="w-full mt-4 text-left table-fixed min-w-full overflow-x-auto">
                             <thead>
                                 <tr>
                                     <th className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
