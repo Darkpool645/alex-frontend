@@ -4,6 +4,7 @@ import AuthLayout from "../config/AuthLayout";
 const AdminLayout = lazy(() => import("@/components/admin/AdminLayout.jsx"));
 const AdminDashboardScreen = lazy(() => import("@/screens/admin/AdminDashboardScreen.jsx"));
 const CreateExamScreen = lazy (()=> import("@/screens/admin/CreateExamScreen.jsx"));
+const EmployeListScreen =  lazy(() => import("@/screens/admin/EmployeeListScreen.jsx"));
 const Loader = lazy(() => import("@/components/public/Loader.jsx"));
 
 const AdminRoutes = [
@@ -24,6 +25,10 @@ const AdminRoutes = [
             {
                 path: "exams/new-exam",
                 element: <CreateExamScreen />
+            },
+            {
+                path: "employees",
+                element: <EmployeListScreen />
             }
         ],
     },

@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { HomeIcon, PlusCircleIcon, ArrowsUpDownIcon } from "@heroicons/react/24/solid";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import FastCounter from "@/components/common/FastCounter";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getEmployeesAmount } from "@/services/InstituteServices";
 import useInstitute from "@/hooks/useInstituteHook";
 
 const AdminDashboard = () => {
+    const navigate = useNavigate();
     const { institute } = useInstitute();
     const [employeesNumber, setEmployeesNumber] = useState(0);
     useEffect(() => {
@@ -29,7 +30,7 @@ const AdminDashboard = () => {
                 <h1 className="text-5xl font-bold">Panel General</h1>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-10">
-                <div className="w-full min-h-28 rounded-lg shadow-md flex flex-col justify-center items-center">
+                <div className="w-full min-h-28 rounded-lg cursor-pointer shadow-md flex flex-col justify-center items-center" onClick={() => navigate("/admin/employees")}>
                     <h1 className="text-lg font-semibold mb-1">Docentes</h1>
                     <FastCounter target={employeesNumber} />
                 </div>

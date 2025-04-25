@@ -12,9 +12,15 @@ const CreateExamScreen = () => {
     ];
 
     const modes = [
-        { label: "En línea", value: "online" },
-        { label: "Presencial", value: "presential" }
+        { label: "Virtual", value: "VIRTUAL" },
+        { label: "Presencial", value: "PRESENCIAL" }
     ];
+
+    const shifts = [
+        { label: "Matutino", value: "MATUTINO" },
+        { label: "Vespentino", values: "VESPENTINO" },
+        { label: "Nocturno", values: "NOCTURNO" }
+    ]
 
     const teachers = [
         { label: "Docente 1", value: "teacher1" },
@@ -32,14 +38,16 @@ const CreateExamScreen = () => {
     ];
 
     const baseForm = {
-        title: "",
-        mode: "",
-        teacher: "",
-        duration: "",
-        subject: "",
-        instrucctions: "",
+        title: "", //exam_name
+        mode: "", //exam_mode
+        teacher: "", //fk_user_account
+        duration: "", //exam_duration
+        subject: "", //subject
+        instrucctions: "", //exam_description
         examFile: null,
-        questions: []
+        examShift: "", //exam_shift
+        questions: [], //Esto es lo que se guarda en mongodb
+        examCode: "",
     };
 
     const baseSchema = {
@@ -50,7 +58,9 @@ const CreateExamScreen = () => {
         subject: { required: true },
         instrucctions: { required: true },
         examFile: { required: false },
-        questions: { required: true }
+        questions: { required: true },
+        examShift: { required: true },
+        examCode: { required: true, minLength: 8, maxLength: 8  },
     };
 
     const {
@@ -150,7 +160,7 @@ const CreateExamScreen = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full gap-4 pt-10">
                     <InputField label="Título del examen" value={formData.title} onChange={handleChange("title")}
-                        placeholder="Campo de prueba" required error={!!errors.title} errorMessage={errors.title}
+                        placeholder="Título del examen" required error={!!errors.title} errorMessage={errors.title}
                         onBlur={(e) => validateField("title", e.target.value)}
                     />
                     <InputField label="Modalidad" value={formData.mode} onChange={handleChange("mode")}
@@ -170,7 +180,10 @@ const CreateExamScreen = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-4 pt-2">
                     <InputField label="Materia" value={formData.subject} onChange={handleChange("subject")} placeholder="Materia del examen"
                         required error={!!errors.subject} errorMessage={errors.subject} onBlur={(e) => validateField("subject", e.target.value)} />
-                    <InputField label="Prueba" value={""} onChange={() => { }} required onBlur={() => { }} />
+                    <InputField label="Turno" type="select" options={shifts} value={formData.examShift} onChange={handleChange("examShift")} placeholder="Turno del examen"
+                        required error={!!errors.examShift} errorMessage={errors.examShift} onBlur={(e) => validateField("examShift", e.target.value)} />
+                    <InputField label="Código del examen" value={formData.examCode} onChange={handleChange("examCode")} placeholder="Código del examen"
+                        required error={!!errors.examCode} errorMessage={errors.examCode} onBlur={(e) => validateField("examCode", e.target.value)} />
                 </div>
 
                 <InputField label="Instrucciones del examen" value={formData.instrucctions} onChange={handleChange("instrucctions")} placeholder="Instrucciones del examen"
