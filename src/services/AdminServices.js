@@ -22,3 +22,20 @@ export const registerTeacher = async (formData) => {
         throw error;
     }
 }
+
+export const getTeachersList = async (idInstitute) => {
+    try{
+        const response = await fetch (`${API_BASE}/userAccount/getTeachers?idInstitute=${idInstitute}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error(`HTTP error! status ${response.status}`);
+        const data = await response.json();
+        return data;
+    }catch (error) {
+            console.error("Error during getTeachersListt request:", error);
+            throw error;
+         }
+}

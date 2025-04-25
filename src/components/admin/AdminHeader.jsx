@@ -10,7 +10,7 @@ const AdminHeader = () => {
     const navigation = [
         { name: "Panel General", href: "/admin", current: true },
         { name: "Exámenes", href: "/exams", current: false },
-        { name: "Docentes", href: "/teachers", current: false }
+        { name: "Docentes", href: "/admin/employees", current: false }
     ];
     const { logout } = useAuth();
     return (

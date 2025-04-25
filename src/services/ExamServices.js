@@ -20,3 +20,22 @@ export const ParseExam = async (file) => {
         throw error;
     }
 };
+
+export const RegisterExam = async (formData) => {
+    try{
+        const response = await fetch(`${API_BASE}/exam/create-exam`, {
+            method: 'POST',
+            body: JSON.stringify(formData),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error during registerExam request:", error);
+        throw error;
+    }
+}

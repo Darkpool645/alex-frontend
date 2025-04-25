@@ -3,7 +3,11 @@ import Breadcrumb from "@/components/common/Breadcrumb";
 import InputField from "@/components/common/InputField";
 import useForm from "@/hooks/useFormHook";
 import FileDropInput from "@/components/common/FileDropInput";
-import { ParseExam } from "@/services/ExamServices";
+import { ParseExam, RegisterExam } from "@/services/ExamServices";
+import useInstitute from "@/hooks/useInstituteHook";
+import { useEffect, useState } from "react";
+import { getTeachersList } from "@/services/AdminServices";
+import { toast } from "react-toastify";
 
 const CreateExamScreen = () => {
     const menu = [
@@ -15,18 +19,35 @@ const CreateExamScreen = () => {
         { label: "Virtual", value: "VIRTUAL" },
         { label: "Presencial", value: "PRESENCIAL" }
     ];
+    const { institute } = useInstitute();
+    const [teachersList, setTeachersList] = useState([]);
+
+    useEffect(() => {
+        const fetchTeachers = async () => {
+            try {
+                const response = await getTeachersList(institute.idInstitute);
+                const formattedTeachers = response.data.map(t => ({
+                    label: t.name,
+                    value: t.userId
+                }));
+
+                setTeachersList(formattedTeachers);
+            } catch (error) {
+                console.error("Error al obtener la lista de docentes:", error);
+            }
+        };
+
+        if (institute?.idInstitute) {
+            fetchTeachers();
+        }
+    }, [institute]);
+
 
     const shifts = [
         { label: "Matutino", value: "MATUTINO" },
-        { label: "Vespentino", values: "VESPENTINO" },
-        { label: "Nocturno", values: "NOCTURNO" }
+        { label: "Vespertino", value: "VESPERTINO" },
+        { label: "Nocturno", value: "NOCTURNO" }
     ]
-
-    const teachers = [
-        { label: "Docente 1", value: "teacher1" },
-        { label: "Docente 2", value: "teacher2" },
-        { label: "Docente 3", value: "teacher3" }
-    ];
 
     const duration = [
         { label: "30 minutos", value: 30 },
@@ -38,15 +59,15 @@ const CreateExamScreen = () => {
     ];
 
     const baseForm = {
-        title: "", //exam_name
-        mode: "", //exam_mode
-        teacher: "", //fk_user_account
-        duration: "", //exam_duration
-        subject: "", //subject
-        instrucctions: "", //exam_description
+        title: "", 
+        mode: "", 
+        teacher: "", 
+        duration: "", 
+        subject: "", 
+        instructions: "", 
         examFile: null,
-        examShift: "", //exam_shift
-        questions: [], //Esto es lo que se guarda en mongodb
+        examShift: "",
+        questions: [], 
         examCode: "",
     };
 
@@ -56,11 +77,11 @@ const CreateExamScreen = () => {
         teacher: { required: true },
         duration: { required: true },
         subject: { required: true },
-        instrucctions: { required: true },
+        instructions: { required: true },
         examFile: { required: false },
         questions: { required: true },
         examShift: { required: true },
-        examCode: { required: true, minLength: 8, maxLength: 8  },
+        examCode: { required: true, minLength: 8, maxLength: 8 },
     };
 
     const {
@@ -72,8 +93,25 @@ const CreateExamScreen = () => {
         setFormData
     } = useForm(baseForm, baseSchema);
 
-    const onSubmit = (data) => {
-        console.log("📦 Enviando datos del formulario:", data);
+    const onSubmit = async (data) => {
+        try {
+            const result = await RegisterExam({
+                "title": data.title,
+                "mode": data.mode,
+                "teacherId": data.teacher,
+                "duration": data.duration,
+                "subject": data.subject,
+                "instructions": data.instructions,
+                "examShift": data.examShift,
+                "questions": data.questions,
+                "examCode": data.examCode,
+                "instituteId": institute.idInstitute
+            });
+            toast.success("Examen registrado correctamente");
+        } catch (error) {
+            toast.error("Error al registrar el examen");
+            console.error("Error al registrar el examen:", error);
+        }
     };
 
     const handleQuestionChange = (index, value) => {
@@ -168,7 +206,7 @@ const CreateExamScreen = () => {
                         onBlur={(e) => validateField("mode", e.target.value)}
                     />
                     <InputField label="Docente" value={formData.teacher} onChange={handleChange("teacher")}
-                        type="select" icon={ChevronDownIcon} options={teachers} required error={!!errors.teacher} errorMessage={errors.teacher}
+                        type="select" icon={ChevronDownIcon} options={teachersList} required error={!!errors.teacher} errorMessage={errors.teacher}
                         onBlur={(e) => validateField("teacher", e.target.value)}
                     />
                     <InputField label="Duración" value={formData.duration} onChange={handleChange("duration")}
@@ -186,10 +224,10 @@ const CreateExamScreen = () => {
                         required error={!!errors.examCode} errorMessage={errors.examCode} onBlur={(e) => validateField("examCode", e.target.value)} />
                 </div>
 
-                <InputField label="Instrucciones del examen" value={formData.instrucctions} onChange={handleChange("instrucctions")} placeholder="Instrucciones del examen"
-                    required error={!!errors.instrucctions} errorMessage={errors.instrucctions} onBlur={(e) => validateField("instrucctions", e.target.value)} />
+                <InputField label="Instrucciones del examen" value={formData.instructions} onChange={handleChange("instructions")} placeholder="Instrucciones del examen"
+                    required error={!!errors.instructions} errorMessage={errors.instructions} onBlur={(e) => validateField("instructions", e.target.value)} />
 
-                <FileDropInput label="Archivo del examen" value={formData.examFile} onChange={handleFileChange} accept={{ "text/plain": []}}
+                <FileDropInput label="Archivo del examen" value={formData.examFile} onChange={handleFileChange} accept={{ "text/plain": [] }}
                     onBlur={() => validateField("examFile", formData.examFile)} error={!!errors.examFile} errorMessage={errors.examFile} />
 
                 {formData.questions.length > 0 && (
@@ -204,7 +242,7 @@ const CreateExamScreen = () => {
                                     <TrashIcon className="text-white size-5" />
                                 </button>
                             </div>
-    
+
                             {question.answers.map((answer, aIndex) => (
                                 <div key={aIndex} className="flex w-full justify-between items-center gap-4 mt-2">
                                     <input
@@ -225,7 +263,7 @@ const CreateExamScreen = () => {
                                     </button>
                                 </div>
                             ))}
-    
+
                             <button type="button"
                                 className="w-full bg-blue-900 text-white rounded-lg py-2 px-3 mb-3 font-semibold"
                                 onClick={() => handleAddAnswer(qIndex)}>
