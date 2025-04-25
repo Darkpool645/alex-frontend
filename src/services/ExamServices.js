@@ -56,3 +56,20 @@ export const getExamAmout = async (instituteId) => {
         throw error;
     }
 }
+
+export const getExam = async (examCode) => {
+    try{
+        const response = await fetch(`${API_BASE}/exam/get-exam?examCode=${examCode}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error(`HTTP error! status ${response.status}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error during getExam request:", error);
+        throw error;
+    }
+}

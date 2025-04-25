@@ -1,17 +1,27 @@
 import { useEffect, useState, useRef } from "react";
-import initialExam from "@/utils/ExamSample.js";
 import { toast } from "react-toastify";
+import { useExam } from "@/context/ExamContext";
 
 const EXAM_KEY = "exam_submitted";
 
 const ExamAnswerScreen = () => {
-  const [questions, setQuestions] = useState(initialExam.questions);
-  const [selectedAnswers, setSelectedAnswers] = useState(
-    Array(initialExam.questions.length).fill(null)
-  );
+  const { questions } = useExam();
+  const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [result, setResult] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const hasToasted = useRef(false);
+
+  // Inicializa respuestas cuando lleguen las preguntas
+  useEffect(() => {
+    if (questions.length > 0 && selectedAnswers.length === 0) {
+      setSelectedAnswers(Array(questions.length).fill(null));
+    }
+  }, [questions]);
+
+  // Log por si quieres confirmar que el hook funciona
+  useEffect(() => {
+    console.log("Preguntas cargadas desde el hook:", questions);
+  }, [questions]);
 
   // Cargar estado previo si ya se envió
   useEffect(() => {
@@ -28,7 +38,7 @@ const ExamAnswerScreen = () => {
     }
   }, []);
 
-  // Enviar automáticamente si sale de la pestaña o cierra la app
+  // Enviar automáticamente si se cierra o cambia de pestaña
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (
@@ -79,7 +89,7 @@ const ExamAnswerScreen = () => {
     const responses = questions.map((q, index) => {
       const selectedIndex = selectedAnswers[index];
       const selectedAnswer = q.answers[selectedIndex];
-      const isCorrect = selectedAnswer?.is_correct === true;
+      const isCorrect = selectedAnswer?.correct === true; // <-- usa "correct"
 
       return {
         question: q.text,
@@ -90,8 +100,8 @@ const ExamAnswerScreen = () => {
     const correctCount = responses.filter((r) => r.is_correct).length;
     const score = (correctCount / questions.length) * 10;
     const output = {
-      questions: responses,
-      score: parseFloat(score),
+      q: responses,
+      score: parseFloat(score.toFixed(1)),
     };
 
     localStorage.setItem(
