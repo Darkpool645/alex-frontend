@@ -11,7 +11,7 @@ const ExamAnswerScreen = () => {
   const [result, setResult] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Revisa si ya envió el examen antes
+  // Cargar estado previo si ya se envió
   useEffect(() => {
     const alreadySubmitted = localStorage.getItem(EXAM_KEY);
     if (alreadySubmitted) {
@@ -22,6 +22,33 @@ const ExamAnswerScreen = () => {
     }
   }, []);
 
+  // Enviar automáticamente si sale de la pestaña o cierra la app
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (
+        document.visibilityState === "hidden" &&
+        !isSubmitted &&
+        selectedAnswers.some((ans) => ans !== null)
+      ) {
+        autoSubmit();
+      }
+    };
+
+    const handleBeforeUnload = (e) => {
+      if (!isSubmitted && selectedAnswers.some((ans) => ans !== null)) {
+        autoSubmit();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isSubmitted, selectedAnswers]);
+
   const handleSelect = (qIndex, aIndex) => {
     if (isSubmitted) return;
     const updated = [...selectedAnswers];
@@ -31,8 +58,10 @@ const ExamAnswerScreen = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    autoSubmit();
+  };
 
+  const autoSubmit = () => {
     const responses = questions.map((q, index) => {
       const selectedIndex = selectedAnswers[index];
       const selectedAnswer = q.answers[selectedIndex];
@@ -51,13 +80,13 @@ const ExamAnswerScreen = () => {
       score: parseFloat(score),
     };
 
-    // Guardar en localStorage
     localStorage.setItem(
       EXAM_KEY,
       JSON.stringify({ result: output, answers: selectedAnswers })
     );
 
     setResult(output);
+    setIsSubmitted(true);
   };
 
   return (
