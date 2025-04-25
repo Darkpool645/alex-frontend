@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import initialExam from "@/utils/ExamSample.js";
+import { toast } from "react-toastify";
 
 const EXAM_KEY = "exam_submitted";
 
@@ -10,6 +11,7 @@ const ExamAnswerScreen = () => {
   );
   const [result, setResult] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const hasToasted = useRef(false);
 
   // Cargar estado previo si ya se envió
   useEffect(() => {
@@ -19,6 +21,10 @@ const ExamAnswerScreen = () => {
       const storedResult = JSON.parse(alreadySubmitted);
       setResult(storedResult.result);
       setSelectedAnswers(storedResult.answers);
+      if (!hasToasted.current) {
+        toast.info("Ya no puedes modificar tu calificación");
+        hasToasted.current = true;
+      }
     }
   }, []);
 
@@ -31,12 +37,20 @@ const ExamAnswerScreen = () => {
         selectedAnswers.some((ans) => ans !== null)
       ) {
         autoSubmit();
+        if (!hasToasted.current) {
+          toast.info("Saliste de la aplicación. Ya no puedes registrar nuevas respuestas");
+          hasToasted.current = true;
+        }
       }
     };
 
-    const handleBeforeUnload = (e) => {
+    const handleBeforeUnload = () => {
       if (!isSubmitted && selectedAnswers.some((ans) => ans !== null)) {
         autoSubmit();
+        if (!hasToasted.current) {
+          toast.info("Saliste de la aplicación. Ya no puedes registrar nuevas respuestas");
+          hasToasted.current = true;
+        }
       }
     };
 
@@ -87,6 +101,11 @@ const ExamAnswerScreen = () => {
 
     setResult(output);
     setIsSubmitted(true);
+
+    if (!hasToasted.current) {
+      toast.success("Respuestas guardadas automáticamente");
+      hasToasted.current = true;
+    }
   };
 
   return (
@@ -132,7 +151,9 @@ const ExamAnswerScreen = () => {
       {result && (
         <div className="mt-6 p-4 bg-green-100 rounded shadow">
           <h2 className="font-bold text-lg mb-2">Resultados</h2>
-          <p>Score: {result.score}/{questions.length}</p>
+          <p>
+            Score: {result.score}/{questions.length}
+          </p>
         </div>
       )}
     </form>
