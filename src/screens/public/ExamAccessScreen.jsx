@@ -8,11 +8,13 @@ import { toast } from "react-toastify";
 const ExamAccessScreen = () => {
     const navigate = useNavigate();
     const baseForm = {
-        examCode: ""
+        examCode: "",
+        studentName: ""
     };
 
     const baseSchema = {
-        examCode: { required: true, minLength: 8, maxLength: 8 }
+        examCode: { required: true, minLength: 8, maxLength: 8 },
+        studentName: { required: true }
     };
 
     const { formData, errors, handleChange, validateField, handleSubmit } = useForm(baseForm, baseSchema);
@@ -50,6 +52,15 @@ const ExamAccessScreen = () => {
                         onChange={handleChange("examCode")}
                         errorMessage={errors.examCode}
                         onBlur={(e) => validateField("examCode", e.target.value)}
+                    />
+                    <InputField
+                        label="Nombre del estudiante"
+                        required
+                        error={!!errors.studentName}
+                        value={formData.studentName}
+                        onChange={handleChange("studentName")}
+                        errorMessage={errors.studentName}
+                        onBlur={(e) => validateField("studentName", e.target.value)}
                     />
                     <button type="submit" className="mt-10 text-white bg-blue-900 w-full rounded-md px-3 py-2">
                         Acceder al examen
