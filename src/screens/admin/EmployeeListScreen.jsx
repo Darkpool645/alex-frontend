@@ -20,7 +20,7 @@ const EmployeeListScreen = () => {
     };
     const baseSchema = {
         username: { required: true },
-        name: { required: true }
+        name: { required: true, minLenght:8, maxLenght:8 }
     }
     const { institute } = useInstitute();
     const menu = [

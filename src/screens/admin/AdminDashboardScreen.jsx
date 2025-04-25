@@ -4,12 +4,14 @@ import Breadcrumb from "@/components/common/Breadcrumb";
 import FastCounter from "@/components/common/FastCounter";
 import { Link, useNavigate } from "react-router-dom";
 import { getEmployeesAmount } from "@/services/InstituteServices";
+import { getExamAmout } from "@/services/ExamServices";
 import useInstitute from "@/hooks/useInstituteHook";
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
     const { institute } = useInstitute();
     const [employeesNumber, setEmployeesNumber] = useState(0);
+    const [examAmount, setExamAmount] = useState(0);
     useEffect(() => {
         if (!institute) return;
         const fetchEmployeesNumber = async() => {
@@ -17,7 +19,12 @@ const AdminDashboard = () => {
             console.log(result.data);
             setEmployeesNumber(result.data);
         };
+        const fetchExamAmount = async() => {
+            const result = await getExamAmout(institute.idInstitute);
+            setExamAmount(result.data);
+        }
         fetchEmployeesNumber();
+        fetchExamAmount();
     },[institute]);
 
     const menu = [
@@ -36,7 +43,7 @@ const AdminDashboard = () => {
                 </div>
                 <div className="w-full min-h-28 rounded-lg shadow-md flex flex-col justify-center items-center">
                     <h1 className="text-lg font-semibold mb-1">Exámenes</h1>
-                    <FastCounter target={10000} />
+                    <FastCounter target={examAmount} />
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-10">

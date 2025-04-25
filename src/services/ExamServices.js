@@ -39,3 +39,20 @@ export const RegisterExam = async (formData) => {
         throw error;
     }
 }
+
+export const getExamAmout = async (instituteId) => {
+    try{
+        const response = await fetch(`${API_BASE}/exam/get-amount?instituteId=${instituteId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!response.ok) throw new Error(`HTTP error! status ${response.status}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error durigngetExamAmount request:", error);
+        throw error;
+    }
+}

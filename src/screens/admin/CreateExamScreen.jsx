@@ -8,8 +8,10 @@ import useInstitute from "@/hooks/useInstituteHook";
 import { useEffect, useState } from "react";
 import { getTeachersList } from "@/services/AdminServices";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const CreateExamScreen = () => {
+    const navigate = useNavigate();
     const menu = [
         { label: "Exámenes", href: "/admin/exams", icon: DocumentIcon },
         { label: "Nuevo examen", href: "/admin/exams/new-exam" }
@@ -108,6 +110,7 @@ const CreateExamScreen = () => {
                 "instituteId": institute.idInstitute
             });
             toast.success("Examen registrado correctamente");
+            navigate("/admin");
         } catch (error) {
             toast.error("Error al registrar el examen");
             console.error("Error al registrar el examen:", error);
