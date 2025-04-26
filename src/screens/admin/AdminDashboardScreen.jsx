@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
-import { HomeIcon, PlusCircleIcon, ArrowsUpDownIcon, PlayIcon, PencilIcon, ArrowDownTrayIcon } from "@heroicons/react/24/solid";
+import { Fragment, useEffect, useState } from "react";
+import { HomeIcon, PlusCircleIcon, ArrowsUpDownIcon, EyeIcon, PencilIcon, ArrowDownTrayIcon } from "@heroicons/react/24/solid";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import FastCounter from "@/components/common/FastCounter";
 import { Link, useNavigate } from "react-router-dom";
 import { getEmployeesAmount } from "@/services/InstituteServices";
 import { getExamAmout, getExamPageables } from "@/services/ExamServices";
 import useInstitute from "@/hooks/useInstituteHook";
+import StudentResultsDialog from "../../components/admin/StudentResultsDialog";
+
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
@@ -13,6 +15,8 @@ const AdminDashboard = () => {
     const [employeesNumber, setEmployeesNumber] = useState(0);
     const [examAmount, setExamAmount] = useState(0);
     const [examsPageable, setExamPageable] = useState([]);
+    const [isOpen, setIsOpen] = useState(false);
+    const [examReference, setExamReference] = useState(null);
     useEffect(() => {
         if (!institute) return;
         const fetchEmployeesNumber = async() => {
@@ -26,16 +30,26 @@ const AdminDashboard = () => {
         const fetchExamPageable = async() => {
             try{
                 const result = await getExamPageables(institute.idInstitute, 0);
-                console.log("Pageable exams", result.data.content);
-                setExamPageable(result.data.content);
+                    setExamPageable(result.data.content);
             }catch (error){
                 console.error("Error fetching pageable exams:", error);
             }
         };
+        
         fetchExamPageable();
         fetchEmployeesNumber();
         fetchExamAmount();
     },[institute]);
+
+    const openResultsDialog=(examCode) =>{
+        setExamReference(examCode);
+        setIsOpen(true);
+    }
+
+    const closeResultsDialog = () => {
+        setIsOpen(false);
+        setExamReference(null);
+    };
 
     const menu = [
         { label: "Panel General", href: "/admin", icon: HomeIcon }
@@ -59,7 +73,7 @@ const AdminDashboard = () => {
             <div className="pt-10">
                 <div className="relaitve flex flex-col w-full h-full text-slate-700 shadow-md pt-2 px-3 rounded-xl bg-clip-border">
                     <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-semibold text-slate-800">Exámenes pendientes</h3>
+                        <h3 className="text-lg font-semibold text-slate-800">Ultimos exámenes</h3>
                         <div className="flex flex-row gap-2 shrink-0">
                             <button className="rounded border border-slate-300 py-2.5 px-3 text-center text-xs font-semibold text-slate-600 transition-all hover:opacity-75 active:opacity-[0.85]"
                                 type="button">
@@ -113,7 +127,7 @@ const AdminDashboard = () => {
                                                 <td className="p-4 border-b border-slate-100">{exam.examCode}</td>
                                                 <td className="p-4 border-b border-slate-100">{exam.fkUserAccount.username}</td>
                                                 <td className="p-4 border-b border-slate-100 grid grid-cols-1 md:grid-cols-3">
-                                                    <PlayIcon className="cursor-pointer size-5" />
+                                                    <EyeIcon className="cursor-pointer size-5" onClick={() => openResultsDialog(exam.examReference)}/>
                                                     <PencilIcon className="cursor-pointer size-5" />
                                                     <ArrowDownTrayIcon className="cursor-pointer size-5" />
                                                 </td>
@@ -125,6 +139,7 @@ const AdminDashboard = () => {
                     </div>
                 </div>
             </div>
+            <StudentResultsDialog examReference={examReference} isOpen={isOpen} closeModal={closeResultsDialog}/>
         </div>
     )
 };

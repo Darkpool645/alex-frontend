@@ -92,16 +92,38 @@ export const getExamPageables = async (instituteId, page) =>{
 }   
 
 export const saveStudentAnswers = async (questions, studentName, examReference, score) => {
-    try{
-        const response = await fetch(`${API_BASE}/exam/regiser-student-answers?studentName=${studentName}&examReference=${examReference}&score=${score}`,{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'appliction/json'
-            },
-            body: questions
-        })
-    }catch (error) {
-        console.error("Error during saveStudentAnswers request: ", error);
+    try {
+      const response = await fetch(
+        `${API_BASE}/exam/register-student-answers?studentName=${studentName}&examReference=${examReference}&score=${score}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(questions),
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error during saveStudentAnswers request: ", error);
+      throw error;
+    }
+  };
+  
+
+export const getStudentAnswersByExam = async(examReference) => {
+    try {
+        const response = await fetch(`${API_BASE}/exam/get-student-results?examReference=${examReference}`, {
+            method: 'GET'
+        });
+        if (!response.ok) throw new Error(`HTTP error! status ${response.status}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error during getStudentAnswersByExam request:", error);
         throw error;
     }
 }

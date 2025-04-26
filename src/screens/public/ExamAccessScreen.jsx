@@ -18,7 +18,7 @@ const ExamAccessScreen = () => {
     };
 
     const { formData, errors, handleChange, validateField, handleSubmit } = useForm(baseForm, baseSchema);
-    const { setQuestions, saveExamReference } = useExam();
+    const { setQuestions, saveExamReference, setStudent } = useExam();
 
     const onSubmit = async (data) => {
         try {
@@ -30,6 +30,8 @@ const ExamAccessScreen = () => {
             if (questions.length > 0) {
                 setQuestions(questions);
                 saveExamReference(result?.data?.id);
+                console.log("Nombre del estudiante:", data.studentName);
+                setStudent(data.studentName);
                 navigate('/student/exam');
             } else {
                 toast.error("Código de examen erróneo o sin preguntas.");

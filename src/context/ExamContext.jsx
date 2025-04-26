@@ -5,6 +5,7 @@ const LOCAL_STORAGE_KEY = "exam_data";
 
 export const ExamProvider = ({ children }) => {
   const [questions, setQuestionsState] = useState([]);
+  const [student, setStudent] = useState("")
 
   // Cargar desde localStorage al iniciar
   useEffect(() => {
@@ -32,7 +33,7 @@ export const ExamProvider = ({ children }) => {
   }
 
   return (
-    <ExamContext.Provider value={{ questions, setQuestions, saveExamReference}}>
+    <ExamContext.Provider value={{ questions, setQuestions, saveExamReference, student, setStudent}}>
       {children}
     </ExamContext.Provider>
   );
