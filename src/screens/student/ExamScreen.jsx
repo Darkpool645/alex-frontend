@@ -120,53 +120,57 @@ const ExamAnswerScreen = () => {
 
   return (
     <form onSubmit={handleSubmit} className="py-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {questions.map((question, qIndex) => (
-          <div key={qIndex} className="border rounded-lg p-4">
-            <h2 className="font-bold text-lg mb-2">
-              {qIndex + 1}. {question.text}
-            </h2>
-            <ul className="space-y-2">
-              {question.answers.map((answer, aIndex) => (
-                <li key={aIndex} className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name={`question-${qIndex}`}
-                    checked={selectedAnswers[qIndex] === aIndex}
-                    onChange={() => handleSelect(qIndex, aIndex)}
-                    disabled={isSubmitted}
-                  />
-                  <span className="p-2 rounded w-full bg-gray-100">
-                    {String.fromCharCode(65 + aIndex)}. {answer.text}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-
-      <button
-        type="submit"
-        disabled={isSubmitted}
-        className={`px-4 py-2 rounded w-full mt-3 text-white ${
-          isSubmitted
-            ? "bg-gray-400 cursor-not-allowed"
-            : "bg-blue-600 hover:bg-blue-700"
-        }`}
-      >
-        Enviar respuestas
-      </button>
-
-      {result && (
+    {isSubmitted ? (
+      result && (
         <div className="mt-6 p-4 bg-green-100 rounded shadow">
           <h2 className="font-bold text-lg mb-2">Resultados</h2>
           <p>
             Score: {result.score}/{questions.length}
           </p>
         </div>
-      )}
-    </form>
+      )
+    ) : (
+      <>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {questions.map((question, qIndex) => (
+            <div key={qIndex} className="border rounded-lg p-4">
+              <h2 className="font-bold text-lg mb-2">
+                {qIndex + 1}. {question.text}
+              </h2>
+              <ul className="space-y-2">
+                {question.answers.map((answer, aIndex) => (
+                  <li key={aIndex} className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name={`question-${qIndex}`}
+                      checked={selectedAnswers[qIndex] === aIndex}
+                      onChange={() => handleSelect(qIndex, aIndex)}
+                      disabled={isSubmitted}
+                    />
+                    <span className="p-2 rounded w-full bg-gray-100">
+                      {String.fromCharCode(65 + aIndex)}. {answer.text}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <button
+          type="submit"
+          disabled={isSubmitted}
+          className={`px-4 py-2 rounded w-full mt-3 text-white ${
+            isSubmitted
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          }`}
+        >
+          Enviar respuestas
+        </button>
+      </>
+    )}
+  </form>
   );
 };
 
