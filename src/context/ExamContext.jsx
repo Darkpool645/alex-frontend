@@ -27,8 +27,12 @@ export const ExamProvider = ({ children }) => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newQuestions));
   };
 
+  const saveExamReference = (examId) => {
+    localStorage.setItem("examReference", examId);
+  }
+
   return (
-    <ExamContext.Provider value={{ questions, setQuestions }}>
+    <ExamContext.Provider value={{ questions, setQuestions, saveExamReference}}>
       {children}
     </ExamContext.Provider>
   );

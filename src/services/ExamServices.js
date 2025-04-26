@@ -73,3 +73,35 @@ export const getExam = async (examCode) => {
         throw error;
     }
 }
+
+export const getExamPageables = async (instituteId, page) =>{
+    try{
+        const response = await fetch(`${API_BASE}/exam/get-pageable-exams?instituteId=${instituteId}&size=10&page=${page}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error(`HTTP error! status ${response.status}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error during getExamPageables request:", error);
+        throw error;
+    }
+}   
+
+export const saveStudentAnswers = async (questions, studentName, examReference, score) => {
+    try{
+        const response = await fetch(`${API_BASE}/exam/regiser-student-answers?studentName=${studentName}&examReference=${examReference}&score=${score}`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'appliction/json'
+            },
+            body: questions
+        })
+    }catch (error) {
+        console.error("Error during saveStudentAnswers request: ", error);
+        throw error;
+    }
+}

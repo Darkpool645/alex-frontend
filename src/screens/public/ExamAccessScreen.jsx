@@ -18,15 +18,18 @@ const ExamAccessScreen = () => {
     };
 
     const { formData, errors, handleChange, validateField, handleSubmit } = useForm(baseForm, baseSchema);
-    const { setQuestions } = useExam();
+    const { setQuestions, saveExamReference } = useExam();
 
     const onSubmit = async (data) => {
         try {
             const result = await getExam(data.examCode);
+
+            console.log(result);
             const questions = result?.data?.questions || [];
 
             if (questions.length > 0) {
-                setQuestions(questions); // Esto también guarda en localStorage (gracias al contexto)
+                setQuestions(questions);
+                saveExamReference(result?.data?.id);
                 navigate('/student/exam');
             } else {
                 toast.error("Código de examen erróneo o sin preguntas.");
@@ -72,3 +75,6 @@ const ExamAccessScreen = () => {
 };
 
 export default ExamAccessScreen;
+
+
+// TODO - Generar un reporte final de los examenes
