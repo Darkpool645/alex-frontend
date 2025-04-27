@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { HomeIcon, PlusCircleIcon, ArrowsUpDownIcon, EyeIcon, PencilIcon, ArrowDownTrayIcon } from "@heroicons/react/24/solid";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import FastCounter from "@/components/common/FastCounter";
@@ -7,7 +7,7 @@ import { getEmployeesAmount } from "@/services/InstituteServices";
 import { getExamAmout, getExamPageables } from "@/services/ExamServices";
 import useInstitute from "@/hooks/useInstituteHook";
 import StudentResultsDialog from "../../components/admin/StudentResultsDialog";
-
+import downloadStudentSummary from "@/utils/downloadStudentSummary";
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
@@ -129,7 +129,8 @@ const AdminDashboard = () => {
                                                 <td className="p-4 border-b border-slate-100 grid grid-cols-1 md:grid-cols-3">
                                                     <EyeIcon className="cursor-pointer size-5" onClick={() => openResultsDialog(exam.examReference)}/>
                                                     <PencilIcon className="cursor-pointer size-5" />
-                                                    <ArrowDownTrayIcon className="cursor-pointer size-5" />
+                                                    <ArrowDownTrayIcon className="cursor-pointer size-5" 
+                                                        onClick={() => downloadStudentSummary(exam.examReference,exam.examName)}/>
                                                 </td>
                                             </tr>
                                         ))
