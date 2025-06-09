@@ -76,7 +76,7 @@ export const getExam = async (examCode) => {
 
 export const getExamPageables = async (instituteId, page) =>{
     try{
-        const response = await fetch(`${API_BASE}/exam/get-pageable-exams?instituteId=${instituteId}&size=10&page=${page}`, {
+        const response = await fetch(`${API_BASE}/exam/get-pageable-exams?instituteId=${instituteId}&size=100&page=${page}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
