@@ -23,8 +23,11 @@ const ExamAccessScreen = () => {
     const onSubmit = async (data) => {
         try {
             const result = await getExam(data.examCode);
-
-            console.log(result);
+            if (result === "Examen deshabilitado") {
+                toast.error("El examen está deshabilitado");
+                return;
+            }
+            console.log("datos del examen:",result);
             const questions = result?.data?.questions || [];
 
             if (questions.length > 0) {
