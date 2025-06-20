@@ -39,3 +39,20 @@ export const getTeachersList = async (idInstitute) => {
             throw error;
          }
 }
+
+export const toggleExamStatus = async (examId) => {
+    try{
+        const response = await fetch(`${API_BASE}/exam/toggle-exam-status?examId=${examId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error during toggleExamStatus request:", error);
+        throw error;
+    }
+}
