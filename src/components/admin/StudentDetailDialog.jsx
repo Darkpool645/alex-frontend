@@ -27,7 +27,7 @@ const StudentDetailDialog = ({ isOpen, closeModal, student }) => {
                                     { student.questions.map((question, index) => (
                                         <div key={index} className="mt-2 border-b-2 border-gray-200 pb-2">
                                             <p><strong>Pregunta {index + 1}:</strong> {question.text}</p>
-                                            <p><strong>Respuesta Correcta:</strong> {question.answer.corrrect ? "Correcto" : "Falso"}</p>
+                                            <p><strong>Respuesta Correcta:</strong> {question.answer.correct ? "Correcto" : "Falso"}</p>
                                         </div>
                                     ))}
                                 </div>

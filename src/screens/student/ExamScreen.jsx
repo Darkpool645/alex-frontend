@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import { useExam } from "@/context/ExamContext";
-import { saveStudentAnswers } from "@/services/ExamServices"; 
+import { saveStudentAnswers } from "@/services/ExamServices";
 import { useNavigate } from "react-router-dom";
 
 const EXAM_KEY = "exam_submitted";
@@ -12,7 +12,7 @@ const ExamAnswerScreen = () => {
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [result, setResult] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isSaving, setIsSaving] = useState(false); 
+  const [isSaving, setIsSaving] = useState(false);
   const hasToasted = useRef(false);
 
   useEffect(() => {
@@ -49,7 +49,9 @@ const ExamAnswerScreen = () => {
       ) {
         autoSubmit();
         if (!hasToasted.current) {
-          toast.info("Saliste de la aplicación. Ya no puedes registrar nuevas respuestas");
+          toast.info(
+            "Saliste de la aplicación. Ya no puedes registrar nuevas respuestas"
+          );
           hasToasted.current = true;
         }
       }
@@ -59,7 +61,9 @@ const ExamAnswerScreen = () => {
       if (!isSubmitted && selectedAnswers.some((ans) => ans !== null)) {
         autoSubmit();
         if (!hasToasted.current) {
-          toast.info("Saliste de la aplicación. Ya no puedes registrar nuevas respuestas");
+          toast.info(
+            "Saliste de la aplicación. Ya no puedes registrar nuevas respuestas"
+          );
           hasToasted.current = true;
         }
       }
@@ -90,15 +94,15 @@ const ExamAnswerScreen = () => {
     const responses = questions.map((q, index) => {
       const selectedIndex = selectedAnswers[index];
       const selectedAnswer = q.answers[selectedIndex];
-      const isCorrect = selectedAnswer?.correct === true;
 
       return {
         question: q.text,
-        is_correct: isCorrect,
+        answer: selectedAnswer?.text || "", 
+        isCorrect: selectedAnswer?.correct === true,
       };
     });
 
-    const correctCount = responses.filter((r) => r.is_correct).length;
+    const correctCount = responses.filter((r) => r.isCorrect).length;
     const score = correctCount;
     const output = {
       q: responses,
