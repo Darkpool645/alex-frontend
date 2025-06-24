@@ -1,3 +1,5 @@
+import { easeOut } from "framer-motion";
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 export const ParseExam = async (file) => {
@@ -90,7 +92,24 @@ export const getExamPageables = async (instituteId, page) =>{
         console.error("Error during getExamPageables request:", error);
         throw error;
     }
-}   
+} 
+
+export const getExamsPageablesByFilter = async (instituteId, filter, page) => {
+    try {
+        const response = await fetch(`${API_BASE}/exam/get-pageable-exams-filtered?instituteId=${instituteId}&filter=${filter}&page=${page}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error(`HTTP error! status ${response.status}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error during getExamsPageablesByFilter request:", error);
+        throw error;
+    }
+}
 
 export const saveStudentAnswers = async (questions, studentName, examReference, score) => {
     try {
