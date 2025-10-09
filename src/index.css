@@ -5,3 +5,8 @@
 html {
     scroll-behavior: smooth;
 }
+
+body {
+    user-select: none;
+    -webkit-user-select:none;
+}
