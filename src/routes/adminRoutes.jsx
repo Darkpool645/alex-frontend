@@ -6,6 +6,7 @@ const AdminDashboardScreen = lazy(() => import("@/screens/admin/AdminDashboardSc
 const CreateExamScreen = lazy (()=> import("@/screens/admin/CreateExamScreen.jsx"));
 const EmployeListScreen =  lazy(() => import("@/screens/admin/EmployeeListScreen.jsx"));
 const Loader = lazy(() => import("@/components/public/Loader.jsx"));
+const UpdateExamScreen = lazy(() => import("@/screens/admin/UpdateExamScreen.jsx"));
 
 const AdminRoutes = [
     {
@@ -29,6 +30,10 @@ const AdminRoutes = [
             {
                 path: "employees",
                 element: <EmployeListScreen />
+            },
+            {
+                path: "update",
+                element: <UpdateExamScreen />
             }
         ],
     },

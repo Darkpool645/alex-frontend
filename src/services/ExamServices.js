@@ -77,6 +77,24 @@ export const getExam = async (examCode) => {
     }
 }
 
+export const getExamData = async (examCode) => {
+    try{
+        const response = await fetch(`${API_BASE}/exam/get-exam/${examCode}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status ${response.status}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error during getExamData request: ", error);
+        throw error;
+    }
+}
+
 export const getExamPageables = async (instituteId, page) =>{
     try{
         const response = await fetch(`${API_BASE}/exam/get-pageable-exams?instituteId=${instituteId}&size=100&page=${page}`, {
@@ -147,3 +165,23 @@ export const getStudentAnswersByExam = async(examReference) => {
         throw error;
     }
 }
+
+
+export const updateExam = async(examData) => {
+    try{
+        const response = await fetch(`${API_BASE}/exam/update-exam?code=${examData.examCode}`, {
+            method: 'PUT',
+            body: JSON.stringify(examData),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error(`HTTP error! status ${response.status}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error during updateExam request:", error);
+        throw error;
+    }
+}
+

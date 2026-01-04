@@ -276,7 +276,9 @@ const AdminDashboard = () => {
                           className="cursor-pointer size-5"
                           onClick={() => openResultsDialog(exam.examReference)}
                         />
-                        <PencilIcon className="cursor-pointer size-5" />
+                        <PencilIcon className="cursor-pointer size-5" 
+                          onClick={() => navigate(`/admin/update?code=${exam.examCode}`)}
+                        />
                         <ArrowDownTrayIcon
                           className="cursor-pointer size-5"
                           onClick={() =>
