@@ -87,12 +87,12 @@ const StudentDetailDialog = ({ isOpen, closeModal, student }) => {
                           <td className="px-4 py-2">
                             <span
                               className={`font-semibold ${
-                                question.answer?.correct
+                                question.answer?.isCorrect
                                   ? "text-green-600"
                                   : "text-red-600"
                               }`}
                             >
-                              {question.answer?.correct
+                              {question.answer?.isCorrect
                                 ? "Correcta"
                                 : "Incorrecta"}
                             </span>

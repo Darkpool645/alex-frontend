@@ -98,7 +98,7 @@ const ExamAnswerScreen = () => {
       return {
         question: q.text,
         answer: selectedAnswer?.text || "", 
-        isCorrect: selectedAnswer?.correct === true,
+        isCorrect: selectedAnswer?.isCorrect === true,
       };
     });
 
