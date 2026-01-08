@@ -148,7 +148,7 @@ const CreateExamScreen = () => {
         const updatedQuestions = [...formData.questions];
         updatedQuestions[questionIndex].answers = updatedQuestions[questionIndex].answers.map((ans, i) => ({
             ...ans,
-            correct: i === answerIndex
+            isCorrect: i === answerIndex
         }));
         setFormData(prev => ({
             ...prev,
@@ -158,7 +158,7 @@ const CreateExamScreen = () => {
 
     const handleAddAnswer = (questionIndex) => {
         const updatedQuestions = [...formData.questions];
-        updatedQuestions[questionIndex].answers.push({ text: "", correct: false });
+        updatedQuestions[questionIndex].answers.push({ text: "", isCorrect: false });
         setFormData(prev => ({
             ...prev,
             questions: updatedQuestions
@@ -252,7 +252,7 @@ const CreateExamScreen = () => {
                                         type="radio"
                                         name={`correct-answer-${qIndex}`}
                                         className="size-4 bg-gray-100 border-blue-500 text-blue-900"
-                                        checked={answer.correct}
+                                        checked={answer.isCorrect}
                                         onChange={() => handleCorrectAnswer(qIndex, aIndex)}
                                     />
                                     <InputField

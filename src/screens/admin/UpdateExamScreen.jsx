@@ -61,7 +61,7 @@ const UpdateExamScreen = () => {
                             text: q.text,
                             answers: q.answers.map(a => ({
                                 text: a.text,
-                                correct: a.isCorrect === true || a.correct === true 
+                                isCorrect: a.isCorrect === true || a.isCorrect === true 
                             }))
                         }))
                     });
@@ -84,7 +84,7 @@ const UpdateExamScreen = () => {
                     ...q,
                     answers: q.answers.map((ans, j) => ({
                         ...ans,
-                        correct: j === aIdx
+                        isCorrect: j === aIdx
                     }))
                 };
             });
@@ -104,7 +104,7 @@ const UpdateExamScreen = () => {
     // 4. VALIDACIÓN
     const validateData = (questions) => {
         for (let i = 0; i < questions.length; i++) {
-            const hasCorrect = questions[i].answers.some(ans => ans.correct === true);
+            const hasCorrect = questions[i].answers.some(ans => ans.isCorrect === true);
             if (!hasCorrect) {
                 toast.warn(`Pregunta ${i + 1} sin respuesta correcta.`);
                 return false;
@@ -133,7 +133,7 @@ const UpdateExamScreen = () => {
                     text: q.text,
                     answers: q.answers.map((a) => ({
                         text: a.text,
-                        isCorrect: a.correct === true
+                        isCorrect: a.isCorrect === true
                     }))
                 }))
             };
@@ -200,7 +200,7 @@ const UpdateExamScreen = () => {
                                         <input 
                                             type="radio" 
                                             name={`radio-group-${qIdx}`} 
-                                            checked={answer.correct === true}
+                                            checked={answer.isCorrect === true}
                                             onChange={() => handleCorrectAnswer(qIdx, aIdx)}
                                             className="size-5 accent-blue-900 cursor-pointer"
                                         />
@@ -223,7 +223,7 @@ const UpdateExamScreen = () => {
                                     type="button" 
                                     onClick={() => {
                                         const updated = [...formData.questions];
-                                        updated[qIdx].answers.push({ text: "", correct: false });
+                                        updated[qIdx].answers.push({ text: "", isCorrect: false });
                                         setFormData(prev => ({...prev, questions: updated}));
                                     }}
                                     className="text-blue-900 text-sm font-bold mt-2"
