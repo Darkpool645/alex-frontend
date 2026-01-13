@@ -18,7 +18,7 @@ const ExamAccessScreen = () => {
     };
 
     const { formData, errors, handleChange, validateField, handleSubmit } = useForm(baseForm, baseSchema);
-    const { setQuestions, saveExamReference, setStudent } = useExam();
+    const { setQuestions, saveExamReference, setStudent, setExamNames } = useExam();
 
     const onSubmit = async (data) => {
         try {
@@ -28,11 +28,14 @@ const ExamAccessScreen = () => {
                 return;
             }
             console.log("datos del examen:",result);
-            const questions = result?.data?.questions || [];
+            
+            const questions = result?.data?.questions?.questions || [];
+            const examName = result?.data?.exam?.examName || "Examen sin nombre";
 
             if (questions.length > 0) {
                 setQuestions(questions);
                 saveExamReference(result?.data?.id);
+                setExamNames(examName);
                 console.log("Nombre del estudiante:", data.studentName);
                 setStudent(data.studentName);
                 navigate('/student/exam');

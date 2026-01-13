@@ -8,12 +8,13 @@ const EXAM_KEY = "exam_submitted";
 
 const ExamAnswerScreen = () => {
   const navigate = useNavigate();
-  const { questions, student } = useExam();
+  const { questions, student, examName } = useExam();
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [result, setResult] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const hasToasted = useRef(false);
+  const [submittedAt, setSubmittedAt] = useState(null);
 
   useEffect(() => {
     if (questions.length > 0 && selectedAnswers.length === 0) {
@@ -91,6 +92,9 @@ const ExamAnswerScreen = () => {
   };
 
   const autoSubmit = async () => {
+    if (isSubmitted) return;
+    const submissionDate = new Date();
+    setSubmittedAt(submissionDate);
     const responses = questions.map((q, index) => {
       const selectedIndex = selectedAnswers[index];
       const selectedAnswer = q.answers[selectedIndex];
@@ -139,15 +143,25 @@ const ExamAnswerScreen = () => {
     }
   };
 
+  console.log("Estudiante", student);
+  console.log("submission", submittedAt);
+
   return (
     <form onSubmit={handleSubmit} className="py-4">
       {isSubmitted ? (
         result && (
           <div className="mt-6 p-4 bg-green-100 rounded shadow">
-            <h2 className="font-bold text-lg mb-2">Resultados</h2>
+            <h2 className="font-bold text-lg mb-2">{examName}</h2>
+            <h2 className="font-bold text-lg mb-2">Resultados de: {student}</h2>
             <p>
               Score: {result.score}/{questions.length}
             </p>
+            {submittedAt && (
+              <>
+              <h2> Fecha de entrega: {submittedAt.toLocaleDateString("es-ES")}</h2>
+              <h2>Hora de entrega: {submittedAt.toLocaleTimeString("es-ES")}</h2>
+              </>
+            )}
           </div>
         )
       ) : (
