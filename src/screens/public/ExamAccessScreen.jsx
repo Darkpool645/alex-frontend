@@ -1,7 +1,7 @@
 import InputField from "@/components/common/InputField";
 import useForm from "@/hooks/useFormHook";
 import { useNavigate } from "react-router-dom";
-import { getExam } from "@/services/ExamServices";
+import { getExam, verifyStudentAnsweredExam } from "@/services/ExamServices";
 import { useExam } from "@/context/ExamContext";
 import { toast } from "react-toastify";
 
@@ -23,28 +23,40 @@ const ExamAccessScreen = () => {
     const onSubmit = async (data) => {
         try {
             const result = await getExam(data.examCode);
+
             if (result === "Examen deshabilitado") {
                 toast.error("El examen está deshabilitado");
                 return;
             }
-            console.log("datos del examen:",result);
-            
+
+            if (!result?.data?.exam?.examReference) {
+                toast.error("Código de examen erróneo o datos del examen incompletos.");
+                return;
+            }
+
+            const examReference = result.data.exam.examReference;
+            const verification = await verifyStudentAnsweredExam(examReference, data.studentName);
+
+            if (verification.error) {
+                toast.error(verification.message);
+                return;
+            }
+
             const questions = result?.data?.questions?.questions || [];
             const examName = result?.data?.exam?.examName || "Examen sin nombre";
 
             if (questions.length > 0) {
                 setQuestions(questions);
-                saveExamReference(result?.data?.id);
+                saveExamReference(examReference);
                 setExamNames(examName);
-                console.log("Nombre del estudiante:", data.studentName);
                 setStudent(data.studentName);
                 navigate('/student/exam');
             } else {
-                toast.error("Código de examen erróneo o sin preguntas.");
+                toast.error("Este examen no tiene preguntas asociadas.");
             }
         } catch (error) {
-            toast.error("Error al obtener el examen");
-            console.error("Error durante la petición de getExam:", error);
+            toast.error("Error al intentar acceder al examen.");
+            console.error("Error en onSubmit de ExamAccessScreen:", error);
         }
     };
 
@@ -83,6 +95,3 @@ const ExamAccessScreen = () => {
 };
 
 export default ExamAccessScreen;
-
-
-// TODO - Generar un reporte final de los examenes

@@ -185,3 +185,19 @@ export const updateExam = async(examData) => {
     }
 }
 
+export const verifyStudentAnsweredExam = async (examCode, studentName) => {
+    try {
+        const response = await fetch(`${API_BASE}/exam/verify-register?examCode=${examCode}&student=${studentName}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error(`HTTP error! status ${response.status}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error during verifyStudentAnsweredExam request:", error);
+        throw error;
+    }
+}
