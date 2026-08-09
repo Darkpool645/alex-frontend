@@ -42,43 +42,67 @@ const ExamAnswerScreen = () => {
   }, []);
 
   useEffect(() => {
+    const hasPendingAnswers = () =>
+      !isSubmitted && selectedAnswers.some((ans) => ans !== null);
+
+    // Punto único de disparo del bloqueo, para no repetir la misma
+    // lógica en cada listener y evitar envíos/toasts duplicados
+    // (autoSubmit ya es idempotente por el guard `if (isSubmitted) return;`).
+    const triggerLockdown = (reason) => {
+      if (!hasPendingAnswers()) return;
+      autoSubmit();
+      if (!hasToasted.current) {
+        toast.info(
+          "Saliste de la aplicación. Ya no puedes registrar nuevas respuestas"
+        );
+        hasToasted.current = true;
+      }
+      console.log("Bloqueo de examen disparado por:", reason);
+    };
+
     const handleVisibilityChange = () => {
-      if (
-        document.visibilityState === "hidden" &&
-        !isSubmitted &&
-        selectedAnswers.some((ans) => ans !== null)
-      ) {
-        autoSubmit();
-        if (!hasToasted.current) {
-          toast.info(
-            "Saliste de la aplicación. Ya no puedes registrar nuevas respuestas"
-          );
-          hasToasted.current = true;
-        }
+      if (document.visibilityState === "hidden") {
+        triggerLockdown("visibilitychange");
       }
     };
 
     const handleBeforeUnload = () => {
-      if (!isSubmitted && selectedAnswers.some((ans) => ans !== null)) {
-        autoSubmit();
-        if (!hasToasted.current) {
-          toast.info(
-            "Saliste de la aplicación. Ya no puedes registrar nuevas respuestas"
-          );
-          hasToasted.current = true;
-        }
-      }
+      triggerLockdown("beforeunload");
+    };
+
+    // Chrome (y navegadores basados en Chromium) permiten dividir la
+    // ventana para ver dos pestañas al mismo tiempo (split view). En ese
+    // modo la página del examen sigue "visible" en pantalla aunque el
+    // alumno haga clic en la otra pestaña dividida, así que
+    // document.visibilityState nunca cambia a "hidden" y
+    // visibilitychange no se dispara. Lo que sí cambia es el FOCO: al
+    // interactuar con el otro panel, esta ventana/documento deja de
+    // tener el foco. Usamos blur como señal principal para ese caso.
+    const handleWindowBlur = () => {
+      triggerLockdown("window-blur");
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("blur", handleWindowBlur);
+
+    // Watchdog de respaldo: por si en alguna versión/combinación de
+    // navegador ni "blur" ni "visibilitychange" se disparan de forma
+    // confiable durante el split view. Revisa periódicamente el estado
+    // real de foco/visibilidad del documento.
+    const focusWatchdog = setInterval(() => {
+      if (!document.hasFocus() || document.visibilityState !== "visible") {
+        triggerLockdown("focus-watchdog");
+      }
+    }, 1500);
 
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("blur", handleWindowBlur);
+      clearInterval(focusWatchdog);
     };
   }, [isSubmitted, selectedAnswers]);
-
   const handleSelect = (qIndex, aIndex) => {
     if (isSubmitted) return;
     const updated = [...selectedAnswers];
