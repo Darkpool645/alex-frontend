@@ -42,14 +42,17 @@ const ExamAnswerScreen = () => {
   }, []);
 
   useEffect(() => {
-    const hasPendingAnswers = () =>
-      !isSubmitted && selectedAnswers.some((ans) => ans !== null);
+    // El examen debe bloquearse en cuanto el estudiante entra a la vista,
+    // sin importar si ya seleccionó alguna respuesta. Solo evitamos
+    // dispararlo si el examen ya fue enviado o si las preguntas todavía
+    // no han cargado (para no bloquear antes de que la vista esté lista).
+    const canLockdown = () => !isSubmitted && questions.length > 0;
 
     // Punto único de disparo del bloqueo, para no repetir la misma
     // lógica en cada listener y evitar envíos/toasts duplicados
     // (autoSubmit ya es idempotente por el guard `if (isSubmitted) return;`).
     const triggerLockdown = (reason) => {
-      if (!hasPendingAnswers()) return;
+      if (!canLockdown()) return;
       autoSubmit();
       if (!hasToasted.current) {
         toast.info(
@@ -102,7 +105,7 @@ const ExamAnswerScreen = () => {
       window.removeEventListener("blur", handleWindowBlur);
       clearInterval(focusWatchdog);
     };
-  }, [isSubmitted, selectedAnswers]);
+  }, [isSubmitted, selectedAnswers, questions]);
   const handleSelect = (qIndex, aIndex) => {
     if (isSubmitted) return;
     const updated = [...selectedAnswers];
