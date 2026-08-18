@@ -179,10 +179,6 @@ const ExamAnswerScreen = () => {
         result && (
           <div className="mt-6 p-4 bg-green-100 rounded shadow">
             <h2 className="font-bold text-lg mb-2">{examName}</h2>
-            <h2 className="font-bold text-lg mb-2">Resultados de: {student}</h2>
-            <p>
-              Score: {result.score}/{questions.length}
-            </p>
             {submittedAt && (
               <>
               <h2> Fecha de entrega: {submittedAt.toLocaleDateString("es-ES")}</h2>
